@@ -17,3 +17,15 @@ pip install -r requirements.txt
     ```bash
         python kubespresso.py
     ```
+
+## Running the container on K8S
+
+```bash
+    kubectl create -f manifests/controller.yaml
+```
+
+## Running the container on Openshift
+
+```bash
+    oc create -f manifests/controller.yaml
+```

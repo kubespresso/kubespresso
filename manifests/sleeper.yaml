@@ -1,0 +1,16 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sleeper
+  labels:
+    expectedDuration: "60"
+spec:
+  template:
+    spec:
+      containers:
+      - name: sleeper
+        image: centos:7
+        command: ['/bin/bash']
+        args: ['-c', 'a=60; while [[ $a -gt 0 ]]; do echo $a; ((a--)); sleep 1; done']
+      restartPolicy: Never

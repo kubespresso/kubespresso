@@ -1,0 +1,51 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kubespresso
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kubespresso-controller
+  namespace: kubespresso
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubespresso-controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: kubespresso-controller
+    namespace: kubespresso
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubespresso-controller
+  namespace: kubespresso
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      kubespresso.io: kubespresso-controller
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      name: kubespresso-controller
+      labels:
+        kubespresso.io: kubespresso-controller
+    spec:
+      serviceAccountName: kubespresso-controller
+      containers:
+        - name: kubespresso
+          command: ['python', '/kubespresso.py']
+          image: quay.io/gbenhaim/kubespresso:1.0.0

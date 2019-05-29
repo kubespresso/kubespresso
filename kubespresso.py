@@ -9,6 +9,19 @@ LAST_MODIFIED_LABEL = 'kubespresso.io/lastCoffeeGranted'
 EXPECTED_DURATION_LABEL = 'kubespresso.io/expectedDuration'
 
 
+class Color(object):
+    DEFAULT = '\x1b[0m'
+    RED = '\x1b[31m'
+    GREEN = '\x1b[32m'
+    YELLOW = '\x1b[33m'
+    CYAN = '\x1b[36m'
+
+    @classmethod
+    def colored(cls, color, message):
+        """Small function to wrap a string around a color"""
+        return getattr(cls, color.upper()) + message + cls.DEFAULT
+
+
 def cluster_login():
     """Initialize kubeconfig so we can communicate with the API server
 
@@ -24,7 +37,7 @@ def cluster_login():
 
 
 def setup_logger(level=logging.INFO):
-    logging.basicConfig()
+    logging.basicConfig(format='* %(message)s')
     logging.getLogger().setLevel(level)
 
 
@@ -62,9 +75,9 @@ def coffee_handler(event):
     """
     deserves_coffee, explain = should_perform_on(event)
     if not deserves_coffee:
-        logging.info(f'Sorry, {explain}')
+        logging.info(Color.colored('yellow', f'Sorry, {explain}'))
         return
-    logging.info(f'Good news! {explain}')
+    logging.info(Color.colored('green', f'Good news! {explain}'))
     make_coffee()
     touch_job_event(event)
 
@@ -135,7 +148,7 @@ def make_coffee():
     """Do an API call to the coffee machine and make a coffee
     """
     # ... some coffe machine specific code goes here ....
-    logging.info('Coffe is waiting for you in the kitchen!')
+    logging.info(Color.colored('cyan', 'Coffe is waiting for you in the kitchen!'))
 
 
 def touch_job_event(event):

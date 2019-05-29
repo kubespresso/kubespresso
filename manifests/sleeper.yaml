@@ -3,8 +3,9 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: sleeper
-  labels:
-    expectedDuration: "60"
+  annotations:
+    # Coffee is granted for jobs with expectedDuration >= 60
+    kubespresso.io/expectedDuration: "60"
 spec:
   template:
     spec:

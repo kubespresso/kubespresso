@@ -48,4 +48,4 @@ spec:
       containers:
         - name: kubespresso
           command: ['python', '/kubespresso.py']
-          image: quay.io/kubespresso/kubespresso:1.0.0
+          image: quay.io/kubespresso/kubespresso:1.0.1

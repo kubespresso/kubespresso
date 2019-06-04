@@ -1,17 +1,15 @@
 ---
-apiVersion: batch/v1
-kind: Job
+apiVersion: v1
+kind: Pod
 metadata:
   name: sleeper
+  namespace: kubespresso
   annotations:
-    # Coffee is granted for jobs with expectedDuration >= 60
     kubespresso.io/expectedDuration: "60"
 spec:
-  template:
-    spec:
-      containers:
-      - name: sleeper
-        image: centos:7
-        command: ['/bin/bash']
-        args: ['-c', 'a=60; while [[ $a -gt 0 ]]; do echo $a; ((a--)); sleep 1; done']
-      restartPolicy: Never
+  containers:
+  - name: sleeper
+    image: centos:7
+    command: ['/bin/bash']
+    args: ['-c', 'a=60; while [[ $a -gt 0 ]]; do echo $a; ((a--)); sleep 1; done']
+  restartPolicy: Never
